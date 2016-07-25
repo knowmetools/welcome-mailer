@@ -1,0 +1,16 @@
+#! /bin/bash
+
+ZIPFILE="$(pwd)/welcome_mailer.zip"
+
+# Remove existing archive if it exists
+if [ -f $ZIPFILE ]
+    then
+        echo "Removing existing archive."
+        rm $ZIPFILE
+fi
+
+zip -9 $ZIPFILE *.py
+
+# Include third party packages
+cd $VIRTUAL_ENV/lib/python2.7/site-packages/
+zip -r9 $ZIPFILE *
