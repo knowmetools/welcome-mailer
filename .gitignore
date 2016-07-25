@@ -59,9 +59,15 @@ docs/_build/
 # PyBuilder
 target/
 
-#Ipython Notebook
+# Ipython Notebook
 .ipynb_checkpoints
 
 # Sublime Text Files
 *.sublime-project
 *.sublime-workspace
+
+# Local settings
+local_settings.py
+
+# Packaged Files
+welcome_mailer.zip
