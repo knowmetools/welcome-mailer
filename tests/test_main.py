@@ -1,8 +1,22 @@
 from unittest import TestCase
 
+import local_settings as settings
 import main
 from testing_utils import create_user
 from tests import fixtures
+
+
+class TestGetClient(TestCase):
+    """ Test cases for the get_client function """
+
+    def test_get_client(self):
+        """ Test getting the mandrill client.
+
+        The client should get the API_KEY from the settings file.
+        """
+        client = main.get_client()
+
+        self.assertEqual(settings.API_KEY, client.apikey)
 
 
 class TestParseUser(TestCase):
