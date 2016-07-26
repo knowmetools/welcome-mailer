@@ -1,7 +1,10 @@
 #! /bin/bash
 
+function_name="sendWelcomeEmail"
+zip_name="welcome_mailer.zip"
+
 cur_dir="$(dirname "$0")"
 "$cur_dir/package"
 
-zipfile="fileb://$(pwd)/welcome_mailer.zip"
-aws lambda update-function-code --function-name sendWelcomeEmail --zip-file $zipfile
+zipfile="fileb://$(pwd)/$zip_name"
+aws lambda update-function-code --function-name $function_name --zip-file $zipfile

@@ -1,0 +1,29 @@
+sudo: false
+
+language: python
+python: "2.7"
+
+before_install:
+  - pip install --upgrade pip wheel
+
+# install dependencies
+install:
+  - pip install -r requirements.txt
+  - pip install codecov coverage flake8 mock nose
+
+# lint before testing
+before_script:
+  - flake8 .
+
+# run tests
+script: nosetests
+
+# publish coverage reports
+after_success:
+  - codecov
+
+# Only send emails about failures
+notifications:
+  email:
+    on_success: never
+    on_failure: always
