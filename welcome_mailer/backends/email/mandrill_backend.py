@@ -32,14 +32,9 @@ class MandrillBackend(BaseBackend):
 
             raise
 
-    def send_email(self, user):
-        """ Send greeting email to user """
-        if not self.authenticated:
-            self.authenticate()
-
-        template_name = settings.TEMPLATE_NAME
-        template_content = []
-        message = {
+    def get_message(self, user):
+        """ Get the message content for a welcome email to a user """
+        return {
             'from_email': 'no-reply@knowmetools.com',
             'global_merge_vars': [
                 {
@@ -59,6 +54,15 @@ class MandrillBackend(BaseBackend):
                 },
             ],
         }
+
+    def send_email(self, user):
+        """ Send greeting email to user """
+        if not self.authenticated:
+            self.authenticate()
+
+        template_name = settings.TEMPLATE_NAME
+        template_content = []
+        message = self.get_message(user)
 
         return self.client.messages.send_template(
             template_name=template_name, template_content=template_content,
