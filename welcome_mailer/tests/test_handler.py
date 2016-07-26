@@ -1,42 +1,12 @@
 from unittest import TestCase
 
-from mandrill import InvalidKeyError
-
 from mock import patch
 
-from welcome_mailer import handler, models, settings
-from welcome_mailer.testing_utils import fake_user_ping
+from welcome_mailer import handler, models
 from welcome_mailer.tests import fixtures
 
 
-@patch('welcome_mailer.handler.mandrill.Users.ping', autospec=True,
-       side_effect=fake_user_ping)
-class TestGetClient(TestCase):
-    """ Test cases for the get_client function """
-
-    def test_get_client(self, mock_ping):
-        """ Test getting the mandrill client.
-
-        The client should get the API_KEY from the settings file.
-        """
-        client = handler.get_client()
-
-        self.assertEqual(settings.API_KEY, client.apikey)
-        self.assertEqual(1, mock_ping.call_count)
-
-    @patch('welcome_mailer.handler.settings.API_KEY', 'invalid')
-    def test_invalid_key(self, mock_ping):
-        """ Test using an invalid api key.
-
-        If the api key is invalid, and InvalidKeyError should be raised.
-        """
-        with self.assertRaises(InvalidKeyError):
-            handler.get_client()
-
-        self.assertEqual(1, mock_ping.call_count)
-
-
-@patch('welcome_mailer.handler.send_email', autospec=True, return_value={})
+@patch('welcome_mailer.handler.MandrillBackend.send_email', return_value={})
 class TestLambdaHandler(TestCase):
     """ Test cases for the lambda_handler function """
 
