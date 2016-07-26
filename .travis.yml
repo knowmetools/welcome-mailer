@@ -3,6 +3,11 @@ sudo: false
 language: python
 python: "2.7"
 
+env:
+  global:
+    - AWS_ACCESS_KEY=AKIAJT5LIRUOLXYTLPXQ
+    - secure: ApGNSYfTBW/DbPqHF35D83QX5x7DnOtV9HhaDcUUjLNp3Ksckg1g8BULPocG88M8II50gaKQWEWCSSacVi05XytKJuke2t8GREgSwiDo/sOEdo+C6w20CKTe66OVW9Ix8WSNIfZUoREtom+F209yeGYkoZSoQ/Dtdg0KhheG/ecEhay/kyG+eu/VAXS4d3/Y9f3l/360WZE48xjgzKfDCfYTtdga7cckx9eJFdaXmZ21eqGpS8k42NPamGXcxSAzX8guzh5FftoWFnobuz5SQa6ce0GJzPd3YihJg/1JHC0Ehl/SL0X4UMe2WvNaAsYCettBT3D3UtELkicXUReJb2TbNW3aYIOSdVOXx5qHhzf63XdjO5QLIRC8w6H4WfrNkpdreHvcdNH94/iQOsPPn3KEynQ5MqCbhjZaRtvE2KeWatIyrsdHIrs1M5llVJMy+ZNfTu4i6x+AfLBsqxTDn9WwRVl/ljox/coWWkZ5gqvlcv5jD8l849/u4D12OUC7bH94wR7bgy1a6MXzwE2U62N6WqiI5irFWvQtzioU9SQkgPtnyDuM14CQDhn4bswwycc3Q00bl3upbwc0u+Pd62pEtD8uxR8Nfe/ZTM0ier3puKSyuq9jRR50/bWJwHTy7M+IJu3qmJWQZ7ItRjya6h+uxBrCJf35SjVz55+ozL4=
+
 before_install:
   - pip install --upgrade pip wheel
 
@@ -21,6 +26,17 @@ script: nosetests
 # publish coverage reports
 after_success:
   - codecov
+
+# Deploy to AWS Lambda
+deploy:
+  -
+    provider: lambda
+    function_name: "sendWelcomeEmail"
+    role: "arn:aws:iam::656952694364:role/lambda_basic_execution"
+    handler_name: "welcome_mailer.main.lambda_handler"
+    runtime: python
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
 
 # Only send emails about failures
 notifications:
