@@ -35,7 +35,7 @@ def lambda_handler(event, context):
     """ Handle main lambda event """
     logger.debug("Received event: %s" % event)
 
-    user = parse_user(event)
+    user = models.User.from_event(event)
 
     logger.debug("Parsed user: %s" % user)
 
@@ -53,20 +53,6 @@ def lambda_handler(event, context):
         results = {}
 
     return results
-
-
-def parse_user(event):
-    """ Parse the user from the event """
-    user_dict = event.get('object')
-
-    first_name = user_dict.get('userFirstName')
-    last_name = user_dict.get('userLastName')
-    email = user_dict.get('email')
-    time_created = user_dict.get('createdAt')
-    time_updated = user_dict.get('updatedAt')
-
-    return models.User(
-        first_name, last_name, email, time_created, time_updated)
 
 
 def send_email(user):

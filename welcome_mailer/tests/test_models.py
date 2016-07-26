@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from welcome_mailer import models
 from welcome_mailer.testing_utils import create_user
+from welcome_mailer.tests import fixtures
 
 
 class TestUserClass(TestCase):
@@ -28,6 +29,34 @@ class TestUserClass(TestCase):
         self.assertEqual(params['email'], user.email)
         self.assertEqual(params['time_created'], user.time_created)
         self.assertEqual(params['time_updated'], user.time_updated)
+
+    def test_new_user_from_event(self):
+        """ Test parsing a user from a new user event.
+
+        If the event object is in the proper form, a User instance
+        should be returned from the function.
+        """
+        event = fixtures.new_user_event
+
+        user_dict = event.get('object')
+
+        expected_kwargs = {
+            'first_name': user_dict.get('userFirstName'),
+            'last_name': user_dict.get('userLastName'),
+            'email': user_dict.get('email'),
+            'time_created': user_dict.get('createdAt'),
+            'time_updated': user_dict.get('updatedAt'),
+        }
+
+        expected = models.User(**expected_kwargs)
+
+        user = models.User.from_event(event)
+
+        self.assertEqual(expected.first_name, user.first_name)
+        self.assertEqual(expected.last_name, user.last_name)
+        self.assertEqual(expected.email, user.email)
+        self.assertEqual(expected.time_created, user.time_created)
+        self.assertEqual(expected.time_updated, user.time_updated)
 
     def test_new_user_with_new_user(self):
         """ Test the is_new_user method for a new user.
@@ -77,3 +106,31 @@ class TestUserClass(TestCase):
         }
 
         self.assertEqual(expected, user.to_dict())
+
+    def test_updated_user_from_event(self):
+        """ Test parsing a user from a user update event.
+
+        The function should be able to parse a user from the update
+        event.
+        """
+        event = fixtures.update_user_event
+
+        user_dict = event.get('object')
+
+        expected_kwargs = {
+            'first_name': user_dict.get('userFirstName'),
+            'last_name': user_dict.get('userLastName'),
+            'email': user_dict.get('email'),
+            'time_created': user_dict.get('createdAt'),
+            'time_updated': user_dict.get('updatedAt'),
+        }
+
+        expected = models.User(**expected_kwargs)
+
+        user = models.User.from_event(event)
+
+        self.assertEqual(expected.first_name, user.first_name)
+        self.assertEqual(expected.last_name, user.last_name)
+        self.assertEqual(expected.email, user.email)
+        self.assertEqual(expected.time_created, user.time_created)
+        self.assertEqual(expected.time_updated, user.time_updated)

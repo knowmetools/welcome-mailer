@@ -32,6 +32,23 @@ class User(object):
     def __str__(self):
         return self.__unicode__()
 
+    @classmethod
+    def from_event(cls, event, logger=None):
+        """ Parse a user from an event """
+        logger = logger or logging.getLogger(__name__)
+
+        user_dict = event.get('object')
+
+        logger.debug("Parsing user from: {}".format(user_dict))
+
+        first_name = user_dict.get('userFirstName')
+        last_name = user_dict.get('userLastName')
+        email = user_dict.get('email')
+        time_created = user_dict.get('createdAt')
+        time_updated = user_dict.get('updatedAt')
+
+        return cls(first_name, last_name, email, time_created, time_updated)
+
     def is_new_user(self):
         return self.time_created == self.time_updated
 
