@@ -8,6 +8,35 @@ ADDRESS_HTML = """
 
 API_KEY = 'secret key'
 
+LOGGING_CONFIG = {
+    'version': 1,
+
+    'formatters': {
+        'simple': {
+            'format': '%(name)s - %(levelname)s - %(message)s',
+        },
+        'standard': {
+            'format': '%(asctime)s - %(name)s - %(levelname)8s - %(message)s',
+        },
+    },
+
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'level': 'INFO',
+            'stream': 'ext://sys.stdout',
+        },
+    },
+
+    'root': {
+        'handlers': [
+            'console',
+        ],
+        'level': 'INFO',
+    },
+}
+
 TEMPLATE_NAME = 'welcome-to-know-me'
 
 
