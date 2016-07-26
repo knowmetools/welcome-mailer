@@ -7,7 +7,7 @@ import sys
 
 import mandrill
 
-from welcome_mailer import settings
+from welcome_mailer import models, settings
 
 
 VERSION = '1.0.0'
@@ -65,7 +65,8 @@ def parse_user(event):
     time_created = user_dict.get('createdAt')
     time_updated = user_dict.get('updatedAt')
 
-    return User(first_name, last_name, email, time_created, time_updated)
+    return models.User(
+        first_name, last_name, email, time_created, time_updated)
 
 
 def send_email(user):
@@ -98,42 +99,3 @@ def send_email(user):
     return client.messages.send_template(
         template_name=template_name, template_content=template_content,
         message=message)
-
-
-class User(object):
-    """ Represents a user """
-
-    def __init__(self, first_name, last_name, email, time_created,
-                 time_updated):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.email = email
-        self.time_created = time_created
-        self.time_updated = time_updated
-
-    def __eq__(self, other):
-        if isinstance(other, User):
-            return ((self.first_name == other.first_name) and
-                    (self.last_name == other.last_name) and
-                    (self.email == other.email) and
-                    (self.time_created == other.time_created) and
-                    (self.time_updated == other.time_updated))
-        else:
-            return super(User, self).__eq__(other)
-
-    def __unicode__(self):
-        return '%s %s' % (self.first_name, self.last_name)
-
-    def __str__(self):
-        return self.__unicode__()
-
-    def is_new_user(self):
-        return self.time_created == self.time_updated
-
-    def to_dict(self):
-        return {
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'email': self.email,
-            'is_new': self.is_new_user(),
-        }
