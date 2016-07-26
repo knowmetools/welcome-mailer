@@ -90,23 +90,6 @@ class TestUserClass(TestCase):
 
         self.assertEqual(expected, str(user))
 
-    def test_to_dict(self):
-        """ Test the to_dict method of the User class.
-
-        This method should return a dictionary with the instance's first
-        name, last name, email, and is_new properties.
-        """
-        user = create_user()
-
-        expected = {
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'email': user.email,
-            'is_new': user.is_new_user(),
-        }
-
-        self.assertEqual(expected, user.to_dict())
-
     def test_updated_user_from_event(self):
         """ Test parsing a user from a user update event.
 

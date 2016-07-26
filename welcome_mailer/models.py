@@ -51,11 +51,3 @@ class User(object):
 
     def is_new_user(self):
         return self.time_created == self.time_updated
-
-    def to_dict(self):
-        return {
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'email': self.email,
-            'is_new': self.is_new_user(),
-        }

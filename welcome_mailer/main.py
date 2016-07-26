@@ -26,12 +26,6 @@ def lambda_handler(event, context, logger=None):
 
     user = models.User.from_event(event)
 
-    logger.debug("Parsed user: %s" % user)
-
-    user_dict = user.to_dict()
-
-    logger.debug("User dict: %s" % user_dict)
-
     if user.is_new_user():
         results = send_email(user)
 
