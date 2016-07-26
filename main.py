@@ -7,7 +7,7 @@ import sys
 
 import mandrill
 
-import local_settings as settings
+import settings
 
 
 VERSION = '1.0.0'

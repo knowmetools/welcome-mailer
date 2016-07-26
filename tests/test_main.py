@@ -2,8 +2,8 @@ from unittest import TestCase
 
 from mock import patch
 
-import local_settings as settings
 import main
+import settings
 from testing_utils import create_user
 from tests import fixtures
 
