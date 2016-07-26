@@ -13,7 +13,10 @@ dictConfig(settings.LOGGING_CONFIG)
 
 def get_client():
     """ Get mandrill client """
-    return mandrill.Mandrill(settings.API_KEY)
+    client = mandrill.Mandrill(settings.API_KEY)
+    assert client.users.ping() == u'PONG!', 'User ping failed.'
+
+    return client
 
 
 def lambda_handler(event, context, logger=None):
