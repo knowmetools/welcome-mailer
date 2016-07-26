@@ -1,4 +1,4 @@
-from main import User
+from welcome_mailer import models
 
 
 DEFAULT_USER_PARAMS = {
@@ -23,4 +23,4 @@ def create_user(**kwargs):
     if kwargs:
         raise ValueError("Received unexpected kwargs: %s" % kwargs)
 
-    return User(**params)
+    return models.User(**params)
