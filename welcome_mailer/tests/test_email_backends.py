@@ -95,17 +95,15 @@ class TestMandrillBackend(TestCase):
         backend = email.MandrillBackend('apikey')
         user = create_user()
 
-        expected = {
-            'from_email': settings.FROM_EMAIL,
-            'global_merge_vars': settings.GLOBAL_EMAIL_VARS,
-            'merge_language': 'mailchimp',
+        expected = settings.MESSAGE_CONFIG
+        expected.update({
             'to': [
                 {
                     'email': user.email,
                     'name': str(user),
                 },
             ],
-        }
+        })
 
         self.assertEqual(expected, backend.get_message(user))
 

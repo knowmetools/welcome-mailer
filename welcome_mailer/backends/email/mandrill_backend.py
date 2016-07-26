@@ -34,17 +34,17 @@ class MandrillBackend(BaseBackend):
 
     def get_message(self, user):
         """ Get the message content for a welcome email to a user """
-        return {
-            'from_email': settings.FROM_EMAIL,
-            'global_merge_vars': settings.GLOBAL_EMAIL_VARS,
-            'merge_language': 'mailchimp',
+        message = settings.MESSAGE_CONFIG
+        message.update({
             'to': [
                 {
                     'email': user.email,
                     'name': str(user),
                 },
             ],
-        }
+        })
+
+        return message
 
     def send_email(self, user):
         """ Send greeting email to user """

@@ -43,20 +43,29 @@ ADDRESS_HTML = """
 </address>
 """
 
-# Email address that emails should be sent from
-FROM_EMAIL = 'no-reply@knowmetools.com'
+# Configuration dict for the message. For all options, see:
+# https://mandrillapp.com/api/docs/messages.html#method=send-template
 
-# Variables used for every email sent
-GLOBAL_EMAIL_VARS = [
-    {
-        'name': 'COMPANY',
-        'content': 'Know Me, LLC',
-    },
-    {
-        'name': 'LIST_ADDRESS_HTML',
-        'content': ADDRESS_HTML,
-    },
-]
+MESSAGE_CONFIG = {
+    'subject': 'Welcome to Know Me',
+    'from_email': 'no-reply@knowmetools.com',
+    'from_name': 'Know Me Team',
+    'track_opens': True,
+    'track_clicks': True,
+    'merge_language': 'mailchimp',
+    'global_merge_vars': [
+        {
+            'name': 'COMPANY',
+            'content': 'Know Me, LLC',
+        },
+        {
+            'name': 'LIST_ADDRESS_HTML',
+            'content': ADDRESS_HTML,
+        },
+    ],
+}
+
+# The name of the template used by mandrill
 
 TEMPLATE_NAME = 'welcome-to-know-me'
 
