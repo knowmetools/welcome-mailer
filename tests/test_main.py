@@ -113,6 +113,49 @@ class TestParseUser(TestCase):
         self.assertEqual(expected.time_updated, user.time_updated)
 
 
+@patch('main.mandrill.Messages.send_template')
+class TestSendEmail(TestCase):
+    """ Test cases for the send_email function """
+
+    def test_send_email(self, mock_send_template):
+        """ Test sending an email to a user.
+
+        The function should attempt to send a templated email using
+        mandrill.
+        """
+        user = create_user(email='test@example.com')
+
+        template_name = settings.TEMPLATE_NAME
+        template_content = []
+        message = {
+            'from_email': 'no-reply@knowmetools.com',
+            'global_merge_vars': [
+                {
+                    'name': 'COMPANY',
+                    'content': 'Know Me, LLC',
+                },
+                {
+                    'name': 'LIST_ADDRESS_HTML',
+                    'content': settings.ADDRESS_HTML,
+                },
+            ],
+            'merge_language': 'mailchimp',
+            'to': [
+                {
+                    'email': user.email,
+                    'name': str(user),
+                },
+            ],
+        }
+
+        main.send_email(user)
+
+        mock_send_template.assert_called_with(
+            template_name=template_name,
+            template_content=template_content,
+            message=message)
+
+
 class TestUserClass(TestCase):
     """ Test cases for the User class """
 
