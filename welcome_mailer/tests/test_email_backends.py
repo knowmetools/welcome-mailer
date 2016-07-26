@@ -97,6 +97,21 @@ class TestMandrillBackend(TestCase):
 
         expected = settings.MESSAGE_CONFIG
         expected.update({
+            'merge_vars': [
+                {
+                    'rcpt': user.email,
+                    'vars': [
+                        {
+                            'name': 'FNAME',
+                            'content': user.first_name,
+                        },
+                        {
+                            'name': 'LNAME',
+                            'content': user.last_name,
+                        },
+                    ],
+                },
+            ],
             'to': [
                 {
                     'email': user.email,
