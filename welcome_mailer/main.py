@@ -7,7 +7,7 @@ import sys
 
 import mandrill
 
-import settings
+from welcome_mailer import settings
 
 
 VERSION = '1.0.0'

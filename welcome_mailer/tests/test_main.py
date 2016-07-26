@@ -2,10 +2,10 @@ from unittest import TestCase
 
 from mock import patch
 
-import main
-import settings
-from testing_utils import create_user
-from tests import fixtures
+from welcome_mailer import main
+from welcome_mailer import settings
+from welcome_mailer.testing_utils import create_user
+from welcome_mailer.tests import fixtures
 
 
 class TestGetClient(TestCase):
@@ -21,7 +21,7 @@ class TestGetClient(TestCase):
         self.assertEqual(settings.API_KEY, client.apikey)
 
 
-@patch('main.send_email', autospec=True, return_value={})
+@patch('welcome_mailer.main.send_email', autospec=True, return_value={})
 class TestLambdaHandler(TestCase):
     """ Test cases for the lambda_handler function """
 
@@ -113,7 +113,7 @@ class TestParseUser(TestCase):
         self.assertEqual(expected.time_updated, user.time_updated)
 
 
-@patch('main.mandrill.Messages.send_template')
+@patch('welcome_mailer.main.mandrill.Messages.send_template')
 class TestSendEmail(TestCase):
     """ Test cases for the send_email function """
 

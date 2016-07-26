@@ -1,4 +1,4 @@
-from main import User
+from welcome_mailer.main import User
 
 
 DEFAULT_USER_PARAMS = {

@@ -13,6 +13,6 @@ TEMPLATE_NAME = 'welcome-to-know-me'
 
 # Import local settings if they exist
 try:
-    from local_settings import *        # noqa
+    from welcome_mailer.local_settings import *        # noqa
 except ImportError:
     pass
