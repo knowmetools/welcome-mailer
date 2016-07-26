@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from mock import patch
 
-from welcome_mailer import main, models, settings
+from welcome_mailer import handler, models, settings
 from welcome_mailer.testing_utils import create_user
 from welcome_mailer.tests import fixtures
 
@@ -15,12 +15,12 @@ class TestGetClient(TestCase):
 
         The client should get the API_KEY from the settings file.
         """
-        client = main.get_client()
+        client = handler.get_client()
 
         self.assertEqual(settings.API_KEY, client.apikey)
 
 
-@patch('welcome_mailer.main.send_email', autospec=True, return_value={})
+@patch('welcome_mailer.handler.send_email', autospec=True, return_value={})
 class TestLambdaHandler(TestCase):
     """ Test cases for the lambda_handler function """
 
@@ -33,7 +33,7 @@ class TestLambdaHandler(TestCase):
         event = fixtures.new_user_event
         user = models.User.from_event(event)
 
-        result = main.lambda_handler(event, None)
+        result = handler.lambda_handler(event, None)
 
         self.assertEqual({}, result)
         mock_send_email.assert_called_with(user)
@@ -46,13 +46,13 @@ class TestLambdaHandler(TestCase):
         """
         event = fixtures.update_user_event
 
-        result = main.lambda_handler(event, None)
+        result = handler.lambda_handler(event, None)
 
         self.assertEqual({}, result)
         self.assertEqual(0, mock_send_email.call_count)
 
 
-@patch('welcome_mailer.main.mandrill.Messages.send_template')
+@patch('welcome_mailer.handler.mandrill.Messages.send_template')
 class TestSendEmail(TestCase):
     """ Test cases for the send_email function """
 
@@ -87,7 +87,7 @@ class TestSendEmail(TestCase):
             ],
         }
 
-        main.send_email(user)
+        handler.send_email(user)
 
         mock_send_template.assert_called_with(
             template_name=template_name,
