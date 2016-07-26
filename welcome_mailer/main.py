@@ -10,9 +10,6 @@ import mandrill
 from welcome_mailer import models, settings
 
 
-VERSION = '1.0.0'
-
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
