@@ -7,7 +7,7 @@ import sys
 
 import mandrill
 
-import local_settings as settings
+import settings
 
 
 VERSION = '1.0.0'
@@ -110,6 +110,16 @@ class User(object):
         self.email = email
         self.time_created = time_created
         self.time_updated = time_updated
+
+    def __eq__(self, other):
+        if isinstance(other, User):
+            return ((self.first_name == other.first_name) and
+                    (self.last_name == other.last_name) and
+                    (self.email == other.email) and
+                    (self.time_created == other.time_created) and
+                    (self.time_updated == other.time_updated))
+        else:
+            return super(User, self).__eq__(other)
 
     def __unicode__(self):
         return '%s %s' % (self.first_name, self.last_name)

@@ -1,4 +1,7 @@
 -r requirements.txt
 
 bumpversion
+coverage
 flake8
+mock
+nose
