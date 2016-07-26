@@ -4,6 +4,7 @@ import logging
 from logging.config import dictConfig
 
 import mandrill
+from mandrill import InvalidKeyError
 
 from welcome_mailer import models, settings
 
@@ -11,9 +12,22 @@ from welcome_mailer import models, settings
 dictConfig(settings.LOGGING_CONFIG)
 
 
-def get_client():
+def get_client(logger=None):
     """ Get mandrill client """
-    return mandrill.Mandrill(settings.API_KEY)
+    logger = logger or logging.getLogger(__name__)
+
+    client = mandrill.Mandrill(settings.API_KEY)
+
+    try:
+        client.users.ping()
+    except InvalidKeyError:
+        logger.error('Invalid mandrill API key', exc_info=True)
+
+        raise
+
+    logger.debug('Succesfully validated mandrill API key')
+
+    return client
 
 
 def lambda_handler(event, context, logger=None):
