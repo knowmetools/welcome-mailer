@@ -5,15 +5,8 @@ from mandrill import InvalidKeyError
 from mock import patch
 
 from welcome_mailer import handler, models, settings
-from welcome_mailer.testing_utils import create_user
+from welcome_mailer.testing_utils import fake_user_ping
 from welcome_mailer.tests import fixtures
-
-
-def fake_user_ping(user_instance):
-    if user_instance.master.apikey == 'invalid':
-        raise InvalidKeyError('Invalid API key')
-
-    return u'PONG!'
 
 
 @patch('welcome_mailer.handler.mandrill.Users.ping', autospec=True,
@@ -73,46 +66,3 @@ class TestLambdaHandler(TestCase):
 
         self.assertEqual({}, result)
         self.assertEqual(0, mock_send_email.call_count)
-
-
-@patch('welcome_mailer.handler.mandrill.Messages.send_template')
-class TestSendEmail(TestCase):
-    """ Test cases for the send_email function """
-
-    def test_send_email(self, mock_send_template):
-        """ Test sending an email to a user.
-
-        The function should attempt to send a templated email using
-        mandrill.
-        """
-        user = create_user(email='test@example.com')
-
-        template_name = settings.TEMPLATE_NAME
-        template_content = []
-        message = {
-            'from_email': 'no-reply@knowmetools.com',
-            'global_merge_vars': [
-                {
-                    'name': 'COMPANY',
-                    'content': 'Know Me, LLC',
-                },
-                {
-                    'name': 'LIST_ADDRESS_HTML',
-                    'content': settings.ADDRESS_HTML,
-                },
-            ],
-            'merge_language': 'mailchimp',
-            'to': [
-                {
-                    'email': user.email,
-                    'name': str(user),
-                },
-            ],
-        }
-
-        handler.send_email(user)
-
-        mock_send_template.assert_called_with(
-            template_name=template_name,
-            template_content=template_content,
-            message=message)
