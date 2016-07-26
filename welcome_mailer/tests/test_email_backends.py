@@ -84,6 +84,44 @@ class TestMandrillBackend(TestCase):
         self.assertFalse(backend.authenticated)
         self.assertEqual(1, mock_ping.call_count)
 
+    def test_get_message(self, mock_ping):
+        """ Test getting the message content for a user.
+
+        This method should generate the message content for a welcome
+        email to a specific user. It should pull in global variables
+        from settings, and generate personal variables for the current
+        user.
+        """
+        backend = email.MandrillBackend('apikey')
+        user = create_user()
+
+        expected = settings.MESSAGE_CONFIG
+        expected.update({
+            'merge_vars': [
+                {
+                    'rcpt': user.email,
+                    'vars': [
+                        {
+                            'name': 'FNAME',
+                            'content': user.first_name,
+                        },
+                        {
+                            'name': 'LNAME',
+                            'content': user.last_name,
+                        },
+                    ],
+                },
+            ],
+            'to': [
+                {
+                    'email': user.email,
+                    'name': str(user),
+                },
+            ],
+        })
+
+        self.assertEqual(expected, backend.get_message(user))
+
     @patch('welcome_mailer.backends.email.mandrill_backend.mandrill.Messages.send_template',        # noqa
            return_value={})
     def test_send_email(self, mock_send_template, mock_ping):
@@ -97,26 +135,7 @@ class TestMandrillBackend(TestCase):
 
         template_name = settings.TEMPLATE_NAME
         template_content = []
-        message = {
-            'from_email': 'no-reply@knowmetools.com',
-            'global_merge_vars': [
-                {
-                    'name': 'COMPANY',
-                    'content': 'Know Me, LLC',
-                },
-                {
-                    'name': 'LIST_ADDRESS_HTML',
-                    'content': settings.ADDRESS_HTML,
-                },
-            ],
-            'merge_language': 'mailchimp',
-            'to': [
-                {
-                    'email': user.email,
-                    'name': str(user),
-                },
-            ],
-        }
+        message = backend.get_message(user)
 
         backend.send_email(user)
 
