@@ -1,3 +1,5 @@
+from mandrill import InvalidKeyError
+
 from welcome_mailer import models
 
 
@@ -24,3 +26,10 @@ def create_user(**kwargs):
         raise ValueError("Received unexpected kwargs: %s" % kwargs)
 
     return models.User(**params)
+
+
+def fake_user_ping(user_instance):
+    if user_instance.master.apikey == 'invalid':
+        raise InvalidKeyError('Invalid API key')
+
+    return u'PONG!'
