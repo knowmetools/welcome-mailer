@@ -1,10 +1,3 @@
-ADDRESS_HTML = """
-<address>
-  <strong>Know Me, LLC</strong> <br />
-  710 Market Street Suite 42 <br />
-  Chapel Hill, NC 27516 <br />
-</address>
-"""
 
 API_KEY = 'secret key'
 
@@ -36,6 +29,34 @@ LOGGING_CONFIG = {
         'level': 'INFO',
     },
 }
+
+# Email Settings:
+#
+# These settings are used to generate a templated welcome email
+
+# Shown at the bottom of our emails
+ADDRESS_HTML = """
+<address>
+  <strong>Know Me, LLC</strong> <br />
+  710 Market Street Suite 42 <br />
+  Chapel Hill, NC 27516
+</address>
+"""
+
+# Email address that emails should be sent from
+FROM_EMAIL = 'no-reply@knowmetools.com'
+
+# Variables used for every email sent
+GLOBAL_EMAIL_VARS = [
+    {
+        'name': 'COMPANY',
+        'content': 'Know Me, LLC',
+    },
+    {
+        'name': 'LIST_ADDRESS_HTML',
+        'content': ADDRESS_HTML,
+    },
+]
 
 TEMPLATE_NAME = 'welcome-to-know-me'
 

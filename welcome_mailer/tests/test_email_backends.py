@@ -96,17 +96,8 @@ class TestMandrillBackend(TestCase):
         user = create_user()
 
         expected = {
-            'from_email': 'no-reply@knowmetools.com',
-            'global_merge_vars': [
-                {
-                    'name': 'COMPANY',
-                    'content': 'Know Me, LLC',
-                },
-                {
-                    'name': 'LIST_ADDRESS_HTML',
-                    'content': settings.ADDRESS_HTML,
-                },
-            ],
+            'from_email': settings.FROM_EMAIL,
+            'global_merge_vars': settings.GLOBAL_EMAIL_VARS,
             'merge_language': 'mailchimp',
             'to': [
                 {
