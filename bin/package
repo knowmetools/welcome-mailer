@@ -11,7 +11,7 @@ fi
 
 # Include source files
 zip -9 $ZIPFILE main.py
-zip -r9 $ZIPFILE welcome_mailer -x "*local_settings.py*"
+zip -r9 $ZIPFILE welcome_mailer
 
 # Include third party packages
 cd $VIRTUAL_ENV/lib/python2.7/site-packages/
