@@ -52,6 +52,7 @@ MESSAGE_CONFIG = {
     'from_name': 'Know Me Team',
     'track_opens': True,
     'track_clicks': True,
+    'inline_css': True,
     'merge_language': 'mailchimp',
     'global_merge_vars': [
         {
